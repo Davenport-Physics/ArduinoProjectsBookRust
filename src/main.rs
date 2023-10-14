@@ -8,6 +8,19 @@ use panic_halt as _;
 mod triple;
 use triple::TriplePins;
 use ufmt::uwriteln;
+use ufmt_float::uFmt_f32;
+
+pub trait EasyUFMT {
+    fn convert(self) -> uFmt_f32; 
+}
+
+impl EasyUFMT for f32 {
+
+    fn convert(self) -> uFmt_f32 {
+        uFmt_f32::Three(self)
+    }
+
+}
 
 #[arduino_hal::entry]
 fn main() -> ! {
@@ -23,17 +36,19 @@ fn main() -> ! {
 
     loop {
 
-        let temp_voltage = tmp36_to_voltage(temp_sensor.analog_read(&mut adc));
-        uwriteln!(&mut serial, "{}", temp_voltage).void_unwrap();
+        let reading = temp_sensor.analog_read(&mut adc);
+        let temp_voltage = voltage_to_temp(tmp36_to_voltage(reading));
+        uwriteln!(&mut serial, "{}", temp_voltage.convert()).void_unwrap();
         arduino_hal::delay_ms(100);
 
     }
 
 }
 
-fn tmp36_to_voltage(reading: u16) -> u16 {
+fn tmp36_to_voltage(reading: u16) -> f32 {
+    (reading as f32)/1024.0 * 5.0
+}
 
-    let val = (reading as f32)/1024.0 * 5.0;
-    val as u16
-
+fn voltage_to_temp(voltage: f32) -> f32 {
+    (voltage - 0.5) * 100.0
 }

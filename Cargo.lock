@@ -12,7 +12,7 @@ dependencies = [
  "avr-hal-generic",
  "cfg-if 1.0.0",
  "embedded-hal",
- "ufmt",
+ "ufmt 0.1.2",
  "void",
 ]
 
@@ -22,9 +22,10 @@ version = "0.1.0"
 dependencies = [
  "arduino-hal",
  "embedded-hal",
- "nb 0.1.3",
+ "nb 1.1.0",
  "panic-halt",
- "ufmt",
+ "ufmt 0.2.0",
+ "ufmt_float",
 ]
 
 [[package]]
@@ -71,7 +72,7 @@ dependencies = [
  "nb 0.1.3",
  "paste",
  "rustversion",
- "ufmt",
+ "ufmt 0.1.2",
  "void",
 ]
 
@@ -108,6 +109,12 @@ name = "embedded-storage"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "723dce4e9f25b6e6c5f35628e144794e5b459216ed7da97b7c4b66cdb3fa82ca"
+
+[[package]]
+name = "micromath"
+version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "39617bc909d64b068dcffd0e3e31679195b5576d0c83fadc52690268cc2b2b55"
 
 [[package]]
 name = "nb"
@@ -184,7 +191,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "31d3c0c63312dfc9d8e5c71114d617018a19f6058674003c0da29ee8d8036cdd"
 dependencies = [
  "proc-macro-hack",
- "ufmt-macros",
+ "ufmt-macros 0.2.0",
+ "ufmt-write",
+]
+
+[[package]]
+name = "ufmt"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1a64846ec02b57e9108d6469d98d1648782ad6bb150a95a9baac26900bbeab9d"
+dependencies = [
+ "ufmt-macros 0.3.0",
  "ufmt-write",
 ]
 
@@ -201,10 +218,31 @@ dependencies = [
 ]
 
 [[package]]
+name = "ufmt-macros"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d337d3be617449165cb4633c8dece429afd83f84051024079f97ad32a9663716"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "ufmt-write"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e87a2ed6b42ec5e28cc3b94c09982969e9227600b2e3dcbc1db927a84c06bd69"
+
+[[package]]
+name = "ufmt_float"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7181bd69b8da1f7822e3b9ab86e89c1c9bd42a6558407c81821ed18738d097b4"
+dependencies = [
+ "micromath",
+ "ufmt 0.2.0",
+]
 
 [[package]]
 name = "unicode-ident"
