@@ -4,11 +4,14 @@
 use arduino_hal::prelude::_void_ResultVoidExt;
 use panic_halt as _;
 
-
-mod triple;
-use triple::TriplePins;
 use ufmt::uwriteln;
 use ufmt_float::uFmt_f32;
+
+mod triple;
+mod tmp36;
+
+use triple::TriplePins;
+use tmp36::Tmp36;
 
 pub trait EasyUFMT {
     fn convert(self) -> uFmt_f32; 
@@ -28,27 +31,13 @@ fn main() -> ! {
     let dp = arduino_hal::Peripherals::take().unwrap();
     let pins = arduino_hal::pins!(dp);
 
-    let mut adc = arduino_hal::Adc::new(dp.ADC, Default::default());
     let mut serial = arduino_hal::default_serial!(dp, pins, 57600);
-
-    let temp_sensor = pins.a0.into_analog_input(&mut adc);
-    //let mut pin_cycler = TriplePins::new(pins.d3.into_output(), pins.d4.into_output(), pins.d5.into_output());
+    let mut temp_sensor = Tmp36::new(pins.a0, dp);
 
     loop {
 
-        let reading = temp_sensor.analog_read(&mut adc);
-        let temp_voltage = voltage_to_temp(tmp36_to_voltage(reading));
-        uwriteln!(&mut serial, "{}", temp_voltage.convert()).void_unwrap();
-        arduino_hal::delay_ms(100);
+        temp_sensor.get_temperature();
 
     }
 
-}
-
-fn tmp36_to_voltage(reading: u16) -> f32 {
-    (reading as f32)/1024.0 * 5.0
-}
-
-fn voltage_to_temp(voltage: f32) -> f32 {
-    (voltage - 0.5) * 100.0
 }
