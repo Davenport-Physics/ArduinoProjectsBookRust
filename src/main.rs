@@ -1,9 +1,7 @@
 #![no_std]
 #![no_main]
 
-use arduino_hal::prelude::_void_ResultVoidExt;
 use panic_halt as _;
-use arduino_hal::adc::Adc;
 
 use ufmt::uwriteln;
 use ufmt_float::uFmt_f32;
