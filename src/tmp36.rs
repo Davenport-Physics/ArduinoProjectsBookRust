@@ -3,27 +3,25 @@ use arduino_hal::pac::ADC;
 use arduino_hal::hal::Atmega;
 use arduino_hal::adc::AdcChannel;
 use arduino_hal::adc::Adc;
-use arduino_hal::Peripherals;
 use arduino_hal::port::mode::Analog;
 use arduino_hal::port::mode::Floating;
 use arduino_hal::port::mode::Input;
 use arduino_hal::port::{Pin, PinOps};
 
-type AnalogPin<A> = Pin<Analog, A>;
 
 pub struct Tmp36<A> {
-    sensor: AnalogPin<A>,
+    sensor: Pin<Analog, A>,
     adc: Adc
 }
 
-impl<A> Tmp36<A>
-where 
-	Pin<Input<Floating>, A>: AdcChannel<Atmega, ADC>,
-	A: PinOps
+impl<A> Tmp36<A> 
+where
+	Pin<Analog, A>: AdcChannel<Atmega, ADC>,
+    A: PinOps
 {
-    pub fn new(mut pin: Pin<Input<Floating>, A>, dp: Peripherals) -> Self {
+    pub fn new(pin: Pin<Input<Floating>, A>, adc: ADC) -> Self {
 
-        let mut adc = Adc::new(dp.ADC, Default::default());
+        let mut adc = Adc::new(adc, Default::default());
         let temp_sensor = pin.into_analog_input(&mut adc);
 
         Tmp36 {

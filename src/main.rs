@@ -3,6 +3,7 @@
 
 use arduino_hal::prelude::_void_ResultVoidExt;
 use panic_halt as _;
+use arduino_hal::adc::Adc;
 
 use ufmt::uwriteln;
 use ufmt_float::uFmt_f32;
@@ -10,7 +11,6 @@ use ufmt_float::uFmt_f32;
 mod triple;
 mod tmp36;
 
-use triple::TriplePins;
 use tmp36::Tmp36;
 
 pub trait EasyUFMT {
@@ -32,11 +32,12 @@ fn main() -> ! {
     let pins = arduino_hal::pins!(dp);
 
     let mut serial = arduino_hal::default_serial!(dp, pins, 57600);
-    let mut temp_sensor = Tmp36::new(pins.a0, dp);
+    let mut temp_sensor = Tmp36::new(pins.a0, dp.ADC);
 
     loop {
 
-        temp_sensor.get_temperature();
+        uwriteln!(&mut serial, "{}", temp_sensor.get_temperature().convert()).unwrap();
+        arduino_hal::delay_ms(100);
 
     }
 
