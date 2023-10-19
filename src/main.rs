@@ -8,6 +8,7 @@ use ufmt_float::uFmt_f32;
 
 mod triple;
 mod tmp36;
+mod utils;
 
 use tmp36::Tmp36;
 
@@ -30,7 +31,7 @@ fn main() -> ! {
     let pins = arduino_hal::pins!(dp);
 
     let mut serial = arduino_hal::default_serial!(dp, pins, 57600);
-    let mut temp_sensor = Tmp36::new(pins.a0, dp.ADC);
+    let mut temp_sensor = Tmp36::new(pins.a1, dp.ADC);
 
     loop {
 
